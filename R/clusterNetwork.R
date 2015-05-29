@@ -1,4 +1,4 @@
-#' Create Reingold-Tilford Tree network diagrams.
+#' Create Reingold-Tilford Cluster network diagrams.
 #'
 #' @param List a hierarchical list object with a root node and children.
 #' @param height height for the network graph's frame area in pixels (if
@@ -22,20 +22,20 @@
 #'
 #' @examples
 #' ## dontrun
-#' ## Create tree from JSON formatted data
+#' ## Create cluster from JSON formatted data
 #' ## Download JSON data
 #' library(RCurl)
 #' Flare <- getURL("https://gist.githubusercontent.com/mbostock/4063550/raw/a05a94858375bd0ae023f6950a2b13fac5127637/flare.json")
 #' ## Convert to list format
 #' Flare <- rjson::fromJSON(Flare)
 #' ## Recreate Bostock example from http://bl.ocks.org/mbostock/4063550
-#' treeNetwork(List = Flare, fontSize = 10, opacity = 0.9)
+#' clusterNetwork(List = Flare, fontSize = 10, opacity = 0.9)
 #'
-#' ## Create a tree dendrogram from an R hclust object
+#' ## Create a cluster dendrogram from an R hclust object
 #' hc <- hclust(dist(USArrests), "ave")
-#' treeNetwork(as.treeNetwork(hc))
+#' clusterNetwork(as.clusterNetwork(hc))
 #'
-#' ## Create tree from a hierarchical R list
+#' ## Create cluster from a hierarchical R list
 #' CanadaPC <- list(name = "Canada", children = list(list(name = "Newfoundland",
 #'                     children = list(list(name = "St. John's"))),
 #'                list(name = "PEI",
@@ -67,10 +67,10 @@
 #'                     children = list(list(name = "Whitehorse")))
 #' ))
 #'
-#' # Visualize the tree
-#' treeNetwork(List = CanadaPC, fontSize = 10)
+#' # Visualize the cluster
+#' clusterNetwork(List = CanadaPC, fontSize = 10)
 #'
-#' @source Reingold. E. M., and Tilford, J. S. (1981). Tidier Drawings of Trees.
+#' @source Reingold. E. M., and Tilford, J. S. (1981). Tidier Drawings of Clusters.
 #' IEEE Transactions on Software Engineering, SE-7(2), 223-228.
 #'
 #' Mike Bostock: \url{http://bl.ocks.org/mbostock/4063550}.
@@ -78,7 +78,7 @@
 #' @importFrom rjson toJSON
 #' @export
 #'
-treeNetwork <- function(
+clusterNetwork <- function(
   List,
   height = NULL,
   width = NULL,
@@ -93,7 +93,8 @@ treeNetwork <- function(
     # validate input
     if (!is.list(List))
       stop("List must be a list object.")
-    root <- toJSON(List)
+    ## root <- toJSON(List)
+    classes <- toJSON(List)
 
     # create options
     options = list(
@@ -110,57 +111,58 @@ treeNetwork <- function(
 
     # create widget
     htmlwidgets::createWidget(
-      name = "treeNetwork",
-      x = list(root = root, options = options),
-      width = width,
-      height = height,
-      htmlwidgets::sizingPolicy(viewer.suppress = TRUE,
-                                browser.fill = TRUE,
-                                browser.padding = 75,
-                                knitr.figure = FALSE,
-                                knitr.defaultWidth = 800,
-                                knitr.defaultHeight = 500),
-      package = "networkD3")
+        name = "clusterNetwork",
+        x = list(classes = classes, options = options),
+        width = width,
+        height = height,
+        htmlwidgets::sizingPolicy(viewer.suppress = TRUE,
+                                  browser.fill = TRUE,
+                                  ## browser.padding = 75,
+                                  browser.padding = 0,
+                                  knitr.figure = FALSE,
+                                  knitr.defaultWidth = 800,
+                                  knitr.defaultHeight = 500),
+        package = "networkD3")
 
 }
 
 #' @rdname networkD3-shiny
 #' @export
-treeNetworkOutput <- function(outputId, width = "100%", height = "800px") {
-    shinyWidgetOutput(outputId, "treeNetwork", width, height,
+clusterNetworkOutput <- function(outputId, width = "100%", height = "800px") {
+    shinyWidgetOutput(outputId, "clusterNetwork", width, height,
                         package = "networkD3")
 }
 
 #' @rdname networkD3-shiny
 #' @export
-renderTreeNetwork <- function(expr, env = parent.frame(), quoted = FALSE) {
+renderClusterNetwork <- function(expr, env = parent.frame(), quoted = FALSE) {
     if (!quoted) { expr <- substitute(expr) } # force quoted
-    shinyRenderWidget(expr, treeNetworkOutput, env, quoted = TRUE)
+    shinyRenderWidget(expr, clusterNetworkOutput, env, quoted = TRUE)
 }
 
-#' Convert an R hclust or dendrogram object into a treeNetwork list.
+#' Convert an R hclust or dendrogram object into a clusterNetwork list.
 #'
-#' \code{as.treeNetwork} converts an R hclust or dendrogram object into a list suitable
-#' for use by the \code{treeNetwork} function.
+#' \code{as.clusterNetwork} converts an R hclust or dendrogram object into a list suitable
+#' for use by the \code{clusterNetwork} function.
 #'
 #' @param d An object of R class \code{hclust} or \code{dendrogram}.
-#' @param root An optional name for the root node. If missing, use the first argument
+#' @param classes An optional name for the classes node. If missing, use the first argument
 #' variable name.
 #'
-#' @details \code{as.treeNetwork} coverts R objects of class \code{hclust} or
-#' \code{dendrogram} into a list suitable for use with the \code{treeNetwork} function.
+#' @details \code{as.clusterNetwork} coverts R objects of class \code{hclust} or
+#' \code{dendrogram} into a list suitable for use with the \code{clusterNetwork} function.
 #'
 #' @examples
-#' # Create a hierarchical cluster object and display with treeNetwork
+#' # Create a hierarchical cluster object and display with clusterNetwork
 #' ## dontrun
 #' hc <- hclust(dist(USArrests), "ave")
-#' treeNetwork(as.treeNetwork(hc))
+#' clusterNetwork(as.clusterNetwork(hc))
 #'
 #' @export
 
-as.treeNetwork <- function(d, root)
+as.clusterNetwork <- function(d, classes)
 {
-  if(missing(root)) root <- as.character(match.call()[[2]])
+  if(missing(classes)) classes <- as.character(match.call()[[2]])
   if("hclust" %in% class(d)) d <- as.dendrogram(d)
   if(!("dendrogram" %in% class(d)))
     stop("d must be a object of class hclust or dendrogram")
@@ -177,7 +179,7 @@ as.treeNetwork <- function(d, root)
     }
     list(name=attr(x,"label"))
   }
-  list(name=root,children=ul(d))
+  list(name=classes,children=ul(d))
 }
 
 

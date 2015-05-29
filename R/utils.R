@@ -23,19 +23,42 @@
 #' @importFrom plyr ldply
 #' @export
 
-JSONtoDF <- function(jsonStr = NULL, file = NULL, array){
+JSONtoDF <- function(jsonStr = NULL, file = NULL, array, simplify = TRUE){
   if (!is.null(jsonStr) & !is.null(file)){
     stop("Must specify jsonStr OR file.")
   }
   if (is.null(file)){
-    MainList <- fromJSON(json_str = jsonStr)
+    MainList <- fromJSON(json_str = jsonStr, simplify = simplify)
   }
   if (is.null(jsonStr)){
-    MainList <- fromJSON(file = file)
+    MainList <- fromJSON(file = file, simplify = simplify)
   }
   ArrayList <- MainList[[array]]
   MainDF <- ldply(ArrayList, data.frame)
   return(MainDF)
+}
+
+#' Read a JSON file into R as matrix.
+#' 
+#' \code{JSONtoMatrix} reads a JSON data file into R and converts it to a matrix.
+#'
+#' @export
+JSONtoMatrix <- function (jsonStr=NULL,
+                          file=NULL,
+                          ## array,
+                          simplify=TRUE) {
+    if (!is.null(jsonStr) & !is.null(file)) {
+        stop("Must specify jsonStr OR file.")
+    }
+    if (is.null(file)) {
+        MainList <- rjson::fromJSON(json_str = jsonStr, simplify = simplify)
+    }
+    if (is.null(jsonStr)) {
+        MainList <- rjson::fromJSON(file = file, simplify = simplify)
+    }
+    ## length(MainList)
+    MainMatrix <- matrix(data = unlist(MainList), nrow = length(MainList), byrow = TRUE)
+    return(MainMatrix)
 }
 
 #' Internal function from Wei Luo to convert a data frame to a JSON array

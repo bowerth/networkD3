@@ -1,0 +1,9 @@
+dependencies:
+  - name: d3
+    version: 3.4.11
+    src: "htmlwidgets/lib/d3-3.4.11"
+    script: d3.v3.min.js
+  - name: css
+    version: 0
+    src: "htmlwidgets/lib/css-0"
+    style: clusterNetwork.css

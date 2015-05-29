@@ -1,0 +1,54 @@
+---
+title: "Create Network"
+author: "Bo Werth"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Create Network}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\usepackage[utf8]{inputenc}
+---
+
+```{r setup, eval=FALSE, echo=FALSE}
+# rmarkdown::render(file.path(dbpath, "GitHub", "networkD3", "vignettes", "createNetwork.rmd"))
+```
+
+## Naming
+
+Choose network name according to main d3.layout function, e.g. "cluster", "chord" etc.
+
+## R
+
+Create R script at `\R` containing the following functions:
+
+- `...Network`: this function calls `htmlwidgets` to create the HTML
+- `...NetworkOutput`: calls `shinyWidgetOutput` for shiny integration
+- `render...Network`: calls `shinyRenderWidget` for shiny integration
+- `as.xxxNetwork`: convert `hclust` or dendrogram object into networkD3 list
+
+## YAML
+
+Create file with YAML frontmatter at `\inst\htmlwidgets`. If CSS is required, add a line e.g. `style: chordNetwork.css`
+
+## JS
+
+Create file with JavaScript content for `HTMLWidgets.widget()` function at `\inst\htmlwidgets`
+
+`initialize`
+:   - create svg using `d3.layout.xxx()` function  
+	- replace `height` and `width` with `diameter`
+	- add `scale` transformation attribute
+
+`resize`
+:   currently not working properly - should take `height` and `width` parameters to change size of existing svg 
+
+`renderValue`
+:   remove existing children and add values  
+    Datatypes  
+    - list (JSON.parse)
+    - matrix (JSON.parse)
+    - table (d3.csv.parse)
+
+## CSS
+
+Create file with css information at `\inst\htmlwidgets\lib\css-0`

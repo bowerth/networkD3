@@ -8,7 +8,7 @@ StackExchange:
 \url{http://stackoverflow.com/questions/4227223/r-list-to-data-frame}.
 }
 \usage{
-JSONtoDF(jsonStr = NULL, file = NULL, array)
+JSONtoDF(jsonStr = NULL, file = NULL, array, simplify = TRUE)
 }
 \arguments{
 \item{jsonStr}{a JSON object to convert. Note if \code{jsonStr} is specified,
