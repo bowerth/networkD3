@@ -21,21 +21,23 @@
 #'
 #'
 #' @examples
-#' ## dontrun
-#' ## Create tree from JSON formatted data
+#' \dontrun{
+#' #### Create tree from JSON formatted data
 #' ## Download JSON data
 #' library(RCurl)
-#' Flare <- getURL("https://gist.githubusercontent.com/mbostock/4063550/raw/a05a94858375bd0ae023f6950a2b13fac5127637/flare.json")
+#' Flare <- getURL("http://bit.ly/1uNNAbu")
+#'
 #' ## Convert to list format
 #' Flare <- rjson::fromJSON(Flare)
+#'
 #' ## Recreate Bostock example from http://bl.ocks.org/mbostock/4063550
 #' treeNetwork(List = Flare, fontSize = 10, opacity = 0.9)
 #'
-#' ## Create a tree dendrogram from an R hclust object
+#' #### Create a tree dendrogram from an R hclust object
 #' hc <- hclust(dist(USArrests), "ave")
 #' treeNetwork(as.treeNetwork(hc))
 #'
-#' ## Create tree from a hierarchical R list
+#' #### Create tree from a hierarchical R list
 #' CanadaPC <- list(name = "Canada", children = list(list(name = "Newfoundland",
 #'                     children = list(list(name = "St. John's"))),
 #'                list(name = "PEI",
@@ -67,8 +69,8 @@
 #'                     children = list(list(name = "Whitehorse")))
 #' ))
 #'
-#' # Visualize the tree
 #' treeNetwork(List = CanadaPC, fontSize = 10)
+#' }
 #'
 #' @source Reingold. E. M., and Tilford, J. S. (1981). Tidier Drawings of Trees.
 #' IEEE Transactions on Software Engineering, SE-7(2), 223-228.
@@ -79,16 +81,16 @@
 #' @export
 #'
 treeNetwork <- function(
-  List,
-  height = NULL,
-  width = NULL,
-  fontSize = 10,
-  linkColour = "#ccc",
-  nodeColour = "#fff",
-  nodeStroke = "steelblue",
-  textColour = "#111",
-  opacity = 0.9,
-  margin = 0)
+                          List,
+                          height = NULL,
+                          width = NULL,
+                          fontSize = 10,
+                          linkColour = "#ccc",
+                          nodeColour = "#fff",
+                          nodeStroke = "steelblue",
+                          textColour = "#111",
+                          opacity = 0.9,
+                          margin = 0)
 {
     # validate input
     if (!is.list(List))
@@ -121,7 +123,6 @@ treeNetwork <- function(
                                 knitr.defaultWidth = 800,
                                 knitr.defaultHeight = 500),
       package = "networkD3")
-
 }
 
 #' @rdname networkD3-shiny
@@ -179,5 +180,3 @@ as.treeNetwork <- function(d, root)
   }
   list(name=root,children=ul(d))
 }
-
-

@@ -41,7 +41,6 @@
 #' graph elements to be.
 #'
 #' @examples
-#' \dontrun{
 #' #### Tabular data example.
 #' # Load data
 #' data(MisLinks)
@@ -52,10 +51,11 @@
 #'              Target = "target", Value = "value", NodeID = "name",
 #'              Group = "group", opacity = 0.4)
 #'
+#' \dontrun{
 #' #### JSON Data Example
 #' # Load data JSON formated data into two R data frames
 #' library(RCurl)
-#' MisJson <- getURL("http://bit.ly/1cc3anB")
+#' MisJson <- getURL("https://raw.githubusercontent.com/christophergandrud/d3Network/master/JSONdata/miserables.json")
 #' MisLinks <- JSONtoDF(jsonStr = MisJson, array = "links")
 #' MisNodes <- JSONtoDF(jsonStr = MisJson, array = "nodes")
 #'
@@ -78,10 +78,10 @@ forceNetwork <- function(Links, Nodes, Source, Target, Value, NodeID,
     linkColour = "#666",opacity = 0.6)
 {
     # Subset data frames for network graph
-    if (class(Links) != "data.frame"){
+    if (!is.data.frame(Links)){
         stop("Links must be a data frame class object.")
     }
-    if (class(Nodes) != "data.frame"){
+    if (!is.data.frame(Nodes)){
         stop("Nodes must be a data frame class object.")
     }
     if (missing(Value)){
