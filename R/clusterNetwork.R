@@ -1,4 +1,4 @@
-#' Create Reingold-Tilford Cluster network diagrams.
+#' Create cluster network diagrams (dynamic hierarchical edge bundling).
 #'
 #' @param List a hierarchical list object with a root node and children.
 #' @param height height for the network graph's frame area in pixels (if
@@ -23,57 +23,11 @@
 #' @examples
 #' ## dontrun
 #' ## Create cluster from JSON formatted data
-#' ## Download JSON data
-#' library(RCurl)
-#' Flare <- getURL("https://gist.githubusercontent.com/mbostock/4063550/raw/a05a94858375bd0ae023f6950a2b13fac5127637/flare.json")
-#' ## Convert to list format
-#' Flare <- rjson::fromJSON(Flare)
-#' ## Recreate Bostock example from http://bl.ocks.org/mbostock/4063550
+#' ## Recreate Bostock example from http://bl.ocks.org/mbostock/7607999
+#' Flare <- rjson::fromJSON(file = system.file("data/readme-flare-imports.json", package = "networkD3"), simplify = FALSE)
 #' clusterNetwork(List = Flare, fontSize = 10, opacity = 0.9)
 #'
-#' ## Create a cluster dendrogram from an R hclust object
-#' hc <- hclust(dist(USArrests), "ave")
-#' clusterNetwork(as.clusterNetwork(hc))
-#'
-#' ## Create cluster from a hierarchical R list
-#' CanadaPC <- list(name = "Canada", children = list(list(name = "Newfoundland",
-#'                     children = list(list(name = "St. John's"))),
-#'                list(name = "PEI",
-#'                     children = list(list(name = "Charlottetown"))),
-#'                list(name = "Nova Scotia",
-#'                     children = list(list(name = "Halifax"))),
-#'                list(name = "New Brunswick",
-#'                     children = list(list(name = "Fredericton"))),
-#'                list(name = "Quebec",
-#'                     children = list(list(name = "Montreal"),
-#'                                     list(name = "Quebec City"))),
-#'                list(name = "Ontario",
-#'                     children = list(list(name = "Toronto"),
-#'                                     list(name = "Ottawa"))),
-#'                list(name = "Manitoba",
-#'                     children = list(list(name = "Winnipeg"))),
-#'                list(name = "Saskatchewan",
-#'                     children = list(list(name = "Regina"))),
-#'                list(name = "Nunavuet",
-#'                     children = list(list(name = "Iqaluit"))),
-#'                list(name = "NWT",
-#'                     children = list(list(name = "Yellowknife"))),
-#'                list(name = "Alberta",
-#'                     children = list(list(name = "Edmonton"))),
-#'                list(name = "British Columbia",
-#'                     children = list(list(name = "Victoria"),
-#'                                     list(name = "Vancouver"))),
-#'                list(name = "Yukon",
-#'                     children = list(list(name = "Whitehorse")))
-#' ))
-#'
-#' # Visualize the cluster
-#' clusterNetwork(List = CanadaPC, fontSize = 10)
-#'
-#' @source Reingold. E. M., and Tilford, J. S. (1981). Tidier Drawings of Clusters.
-#' IEEE Transactions on Software Engineering, SE-7(2), 223-228.
-#'
-#' Mike Bostock: \url{http://bl.ocks.org/mbostock/4063550}.
+#' Mike Bostock: \url{http://bl.ocks.org/mbostock/7607999}.
 #'
 #' @importFrom rjson toJSON
 #' @export

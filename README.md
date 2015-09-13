@@ -1,12 +1,6 @@
 # D3 JavaScript Network Graphs from R
 
-Version 0.1.2.1 [![Build Status](https://travis-ci.org/christophergandrud/networkD3.svg?branch=master)](https://travis-ci.org/christophergandrud/networkD3) ![CRAN Downloads](http://cranlogs.r-pkg.org/badges/last-month/networkD3)
-
-This is a port of Christopher Gandrud's
-[d3Network](http://christophergandrud.github.io/d3Network/) package to the
-[htmlwidgets](https://github.com/ramnathv/htmlwidgets) framework.
-
-This README includes information on set up and a number of basic examples.
+This README includes information on set up and a number of advanced examples.
 For more information see the package's [main page](http://christophergandrud.github.io/networkD3/).
 
 ## Installation
@@ -14,53 +8,38 @@ For more information see the package's [main page](http://christophergandrud.git
 You can install **networkD3** from GitHub as follows:
 
 ```S
+devtools::install_github("alexcb/rjson", subdir = "rjson")
 devtools::install_github('christophergandrud/networkD3')
 ```
 
 ## Usage
 
-Here's an example of `simpleNetwork`:
+Here are two examples of hierarchical edge bundling
+
+### Parse hierarchical JSON data
 
 ```S
-# Create fake data
-src <- c("A", "A", "A", "A", "B", "B", "C", "C", "D")
-target <- c("B", "C", "D", "J", "E", "F", "G", "H", "I")
-networkData <- data.frame(src, target)
-
-# Plot
-simpleNetwork(networkData)
+Flare <- rjson::fromJSON(file = system.file(file.path("data", "readme-flare-imports.json"), package = "networkD3"), simplify = FALSE)
 ```
 
-Here's `forceNetwork`:
+dynamic radial layout uisng `clusterNetwork`:
 
 ```S
-# Load data
-data(MisLinks)
-data(MisNodes)
-
-# Plot
-forceNetwork(Links = MisLinks, Nodes = MisNodes, Source = "source",
-             Target = "target", Value = "value", NodeID = "name",
-             Group = "group", opacity = 0.4,
-             colourScale = "d3.scale.category20b()")
+clusterNetwork(List = Flare)
 ```
 
-Here's `sankeyNetwork` using a downloaded JSON data file:
+static treemap layout using `treemapNetwork`:
 
 ```S
-# Load energy projection data
-library(RCurl)
-URL <- "https://raw.githubusercontent.com/christophergandrud/networkD3/master/JSONdata/energy.json"
-Energy <- getURL(URL, ssl.verifypeer = FALSE)
+treemapNetwork(List = Flare)
+```
 
-# Convert to data frame
-EngLinks <- JSONtoDF(jsonStr = Energy, array = "links")
-EngNodes <- JSONtoDF(jsonStr = Energy, array = "nodes")
+Here's `chordNetwork` using an Uber transport matrix in JSON form:
 
-# Plot
-sankeyNetwork(Links = EngLinks, Nodes = EngNodes, Source = "source",
-            Target = "target", Value = "value", NodeID = "name",
-            fontsize = 12, nodeWidth = 30)
+```S
+table <- read.csv(system.file(file.path("data", "cities.csv"), package = "networkD3"))
+matrix <- JSONtoMatrix(file = system.file(file.path("data", "matrix.json"), package = "networkD3"))
+chordNetwork(matrix = matrix, df = table)
 ```
 
 ### Saving to an external file
