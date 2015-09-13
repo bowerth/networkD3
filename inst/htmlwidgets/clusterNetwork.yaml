@@ -1,9 +1,12 @@
 dependencies:
   - name: d3
-    version: 3.4.11
-    src: "htmlwidgets/lib/d3-3.4.11"
-    script: d3.v3.min.js
-  - name: css
+    # version: 3.4.11
+    # src: "htmlwidgets/lib/d3-3.4.11"
+    # script: d3.v3.min.js
+    version: 3.5.5
+    src: "htmlwidgets/lib/d3-3.5.5"
+    script: d3.min.js
+  - name: css-cluster
     version: 0
-    src: "htmlwidgets/lib/css-0"
+    src: "htmlwidgets/lib/css-cluster-0"
     style: clusterNetwork.css

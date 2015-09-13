@@ -52,3 +52,130 @@ Create file with JavaScript content for `HTMLWidgets.widget()` function at `\ins
 ## CSS
 
 Create file with css information at `\inst\htmlwidgets\lib\css-0`
+
+## Examples
+
+```{r prepare, eval = TRUE, echo = FALSE}
+require(networkD3)
+require(rjson)
+```
+
+```{r test, eval = FALSE, echo = FALSE}
+devtools::install_github("alexcb/rjson", subdir = "rjson")
+devtools::install(file.path(dbpath, "GitHub", "rjson", "rjson"))
+test proper functioning of rjson "simplify":
+line 12: "flare.animate.Easing": only one import, brackets dropped
+"name":"flare.animate.Easing","size":17010,"imports":["flare.animate.Transition
+ui.icionet.FlareImports <- file.path(dbpath, "GitHub", "networkD3", "data", "readme-flare-imports.json")
+ui.icionet.FlareImports <- rjson::fromJSON(file = ui.icionet.FlareImports, simplify = FALSE)
+ui.icionet.FlareImports.json <- rjson::toJSON(x = ui.icionet.FlareImports)
+start <- 2482
+cat('\n', substr(ui.icionet.FlareImports.json, start, (start + 78)), '\n\n')
+```
+
+### Cluster Network
+
+```{r cluster, eval = TRUE}
+## load data
+data_list_path <- file.path(system.file(file.path("data", "readme-flare-imports.json"),
+                                        package = "networkD3"))
+data_list <- rjson::fromJSON(file = data_list_path, simplify = FALSE)
+
+networkD3::clusterNetwork(List = data_list,
+                                    height = 700, width = 700,
+                                    fontSize = 10,
+                                    linkColour = "#ccc",
+                                    nodeColour = "#fff",
+                                    nodeStroke = "steelblue",
+                                    textColour = "#111",
+                                    opacity = 0.9,
+                                    margin = 0)
+
+```
+
+### Treemap Network
+
+```{r treemap, eval = TRUE}
+## load data
+data_list_path <- file.path(system.file(file.path("data", "readme-flare-imports.json"),
+                                        package = "networkD3"))
+data_list <- rjson::fromJSON(file = data_list_path, simplify = FALSE)
+
+networkD3::treemapNetwork(List = data_list,
+                          height = 400,
+                          width = 700,
+                          fontSize = 10,
+                          linkColour = "#ccc",
+                          nodeColour = "#fff",
+                          nodeStroke = "steelblue",
+                          textColour = "#111",
+                          opacity = 0.9,
+                          margin = 0)
+
+```
+
+### Chord Network
+
+```{r chord, eval = TRUE}
+## load data
+data.table <- read.csv(system.file(file.path("data", "cities.csv"),
+                                   package = "networkD3"))
+data.matrix <- JSONtoMatrix(file = system.file(file.path("data", "matrix.json"),
+                                               package = "networkD3"))
+rownames(data.matrix) <- NULL
+colnames(data.matrix) <- NULL
+
+networkD3::chordNetwork(matrix = data.matrix,
+                        digits = 5,
+                        df = data.table,
+                        height = NULL,
+                        width = NULL,
+                        fontSize = 10,
+                        linkColour = "#ccc",
+                        nodeColour = "#fff",
+                        nodeStroke = "steelblue",
+                        textColour = "#111",
+                        opacity = 0.9,
+                        margin = 0)
+```
+
+```{r testing, eval = FALSE, echo = FALSE}
+
+miserables <- system.file(file.path("data", "miserables.json"), package = "networkD3")
+MisLinks <- JSONtoDF(file = miserables, array = "links")
+MisNodes <- JSONtoDF(file = miserables, array = "nodes")
+
+forceNetwork(Links = MisLinks,
+             Nodes = MisNodes,
+             Source = "source",
+             Target = "target",
+             Value = "value",
+             NodeID = "name",
+             Group = "group",
+             opacity = 0.5
+             )
+
+
+Energy <- file.path(dbpath, "GitHub", "networkD3", "data", "energy.json")
+EngLinks <- JSONtoDF(file = Energy, array = "links", simplify = FALSE)
+EngNodes <- JSONtoDF(file = Energy, array = "nodes", simplify = FALSE)
+
+sankeyNetwork(Links = EngLinks,
+              Nodes = EngNodes,
+              Source = "source",
+              Target = "target",
+              Value = "value",
+              NodeID = "name",
+              fontsize = 12,
+              nodeWidth = 30,
+              )
+
+Flare <- file.path(dbpath, "GitHub", "networkD3", "data", "flare.json")
+Flare <- rjson::fromJSON(file = Flare)
+
+treeNetwork(List = Flare,
+            fontSize = 10,
+            opacity = 0.9,
+            margin=0)
+
+```

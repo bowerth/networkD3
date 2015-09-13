@@ -1,9 +1,9 @@
-@import url(http://fonts.googleapis.com/css?family=PT+Serif|PT+Serif:b|PT+Serif:i|PT+Sans|PT+Sans:b);
 
 /* from index.html*/
 
 svg {
-  font: 10px sans-serif;
+  font: 300 10px "Helvetica Neue", Helvetica, Arial, sans-serif;
+  /*font: 10px sans-serif;*/
 }
 
 #circle circle {
